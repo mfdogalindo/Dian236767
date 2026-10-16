@@ -1,4 +1,7 @@
 export const sources = {
+  banrep:{label:'Régimen cambiario · Banco de la República',url:'https://www.banrep.gov.co/es/resolucion-externa-1-2018-cual-se-compendia-y-modifica-el-regimen-cambios-internacionales'},
+  compensacion:{label:'Cuentas de compensación · Banrep',url:'https://www.banrep.gov.co/es/politica-monetaria-cambiaria/regulacion-operaciones-cambiarias/generalidades-cuentas-compensacion'},
+  integridad:{label:'Código de Integridad · Función Pública',url:'https://www.funcionpublica.gov.co/web/eva/codigo-integridad'},
   concurso:{label:'Proceso DIAN 2676 · CNSC',url:'https://www.cnsc.gov.co/convocatorias/dian-2676'},
   acuerdo:{label:'Acuerdo 21 de 2025',url:'https://www.cnsc.gov.co/sites/default/files/2025-11/acuerdo-no-21-dian-2676-de-20251.pdf'},
   anexo:{label:'Anexo técnico del proceso',url:'https://www.cnsc.gov.co/sites/default/files/2025-11/anexo_ps-dian-2676-de-2025.pdf'},

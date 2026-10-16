@@ -17,7 +17,7 @@ npm test
 npm run build
 ```
 
-El build produce `dist/`, incluyendo el banco y los dos informes originales. No abras `index.html` con `file://`: la carga del banco utiliza `fetch` y necesita HTTP.
+El build produce `dist/`, incluyendo el banco y los tres informes originales. No abras `index.html` con `file://`: la carga del banco utiliza `fetch` y necesita HTTP.
 
 ## Netlify
 
@@ -47,6 +47,9 @@ Referencia: [Workers con archivos estáticos](https://developers.cloudflare.com/
 
 - Panel con métricas reales; el estado inicial no inventa resultados.
 - Tres simulacros de 60 ítems, con 40 funcionales, 12 comportamentales y 8 de integridad por forma.
+- Cinco retos temáticos de proceso.md: 50 preguntas adicionales, de dos o tres alternativas, con explicaciones individuales y reloj de 20 minutos. Banco total: 230 ítems, 170 funcionales y 60 autoinformes.
+- Repaso activo con 16 tarjetas, explicación oculta hasta solicitarla y programación progresiva de repasos a 1, 3, 7 y 14 días de Colombia. La autoevaluación organiza el repaso; no genera una nota.
+- Ruta adicional de 12 semanas con productos y metas de práctica; progreso independiente del intensivo y lista de 15 verificaciones.
 - Práctica aleatoria de 10, 20 o todas las preguntas disponibles por tema; sin reloj.
 - Opciones funcionales mezcladas conservando su clave. Las opciones Likert mantienen su orden.
 - Simulacro cronometrado de 240 minutos. Respuestas, marcas y fecha límite sobreviven a recargas; salir no pausa el reloj.
@@ -59,13 +62,15 @@ Referencia: [Workers con archivos estáticos](https://developers.cloudflare.com/
 
 ## Contenido y límites
 
-Se utilizan `deep-research-report.md` y `deep-research-report(1).md`. Los originales se conservan intactos. `scripts/extract.mjs` convierte los 180 ítems en texto del primer informe y sus claves en un banco JSON; el build falla si faltan preguntas. Las explicaciones agrupadas de las formas B y C se adaptan por bloque. Las lecturas sintetizan ambos documentos; no sustituyen los textos normativos.
+Se utilizan `deep-research-report.md`, `deep-research-report(1).md` y `proceso.md`. Los originales se conservan intactos. `scripts/extract.mjs` convierte los 180 ítems en texto del primer informe y sus claves en un banco JSON; el build falla si faltan preguntas. Las explicaciones agrupadas de las formas B y C se adaptan por bloque. `scripts/extract-process.mjs` añade las 50 preguntas y claves de `proceso.md`; las explicaciones individuales se adaptaron para la web. Las lecturas sintetizan los tres documentos y añaden cuentas de compensación, logística, niveles comportamentales y el método C–H–N–A–C–E; no sustituyen los textos normativos. Los archivos originales se conservan sin editar.
 
 El segundo informe enlaza a formas de 100 preguntas y a otros PDF mediante URLs `sandbox:`. Esos archivos no estaban adjuntos: no se ofrecen descargas inexistentes ni se afirma haber importado sus 200 preguntas.
 
 El porcentaje funcional se calcula como aciertos/preguntas funcionales × 100, truncado a dos decimales. Las omisiones funcionales cuentan como no acertadas. No reproduce la transformación psicométrica oficial. Los autoinformes únicamente registran respuestas y finalización; no son instrumentos psicométricos validados.
 
-La fecha de examen y el corte normativo mencionados se atribuyen a las investigaciones. El usuario debe confirmarlos en GOA/SIMO. No se fija automáticamente una cuenta regresiva con una fecha no confirmada. Las ponderaciones se presentan para la categoría de ingreso sin experiencia descrita en los informes.
+Las fuentes discrepan sobre duración y cantidad oficial: `proceso.md` cita secundariamente 156 ítems y cinco horas, mientras los primeros informes usan cuatro horas y no confirman un número. La biblioteca explica esta discrepancia. Los 240 minutos de las formas A/B/C y los 20 minutos de los retos son parámetros de práctica. La fecha de examen y el corte normativo mencionados se atribuyen a las investigaciones. El usuario debe confirmarlos en GOA/SIMO. No se fija automáticamente una cuenta regresiva con una fecha no confirmada. Las ponderaciones se presentan para la categoría de ingreso sin experiencia descrita en los informes.
+
+Las copias JSON v1 previas siguen siendo compatibles: el historial y los índices de lecturas anteriores se conservan. Los nuevos campos de tarjetas, ruta larga y verificaciones se añaden con valores vacíos si faltan.
 
 El progreso se guarda en `localStorage`, en el navegador y origen donde se usa. No se sincroniza automáticamente entre dominios o dispositivos; usa exportar/importar. Cambiar de dominio o borrar datos del navegador no traslada el progreso. Si el almacenamiento está bloqueado o lleno, se informa y se permite exportar.
 
@@ -74,6 +79,7 @@ El progreso se guarda en `localStorage`, en el navegador y origen donde se usa. 
 ```text
 src/                 Interfaz, estilos, lecturas y lógica del simulador
 scripts/extract.mjs  Extracción del banco desde el primer informe
+scripts/extract-process.mjs Extracción de los cinco retos de proceso.md
 scripts/build.mjs    Generación del sitio y copia de fuentes
 scripts/serve.mjs    Servidor HTTP local
 tests/               Pruebas de extracción y calificación
@@ -96,4 +102,4 @@ npm.cmd run test:e2e
 
 En Linux/macOS usa `PLAYWRIGHT_BROWSERS_PATH=.cache/browsers npx playwright install chromium --no-shell` y luego `npm run test:e2e`.
 
-La prueba inicia y cierra su propio servidor local y genera capturas en `artifacts/`. Verifica respuestas, marcas, recarga de sesión, omisiones, notas, plan, lecturas, expiración del reloj, exportación/importación, teclado y desbordamiento horizontal en anchos de 320 a 1440 píxeles.
+La prueba inicia y cierra su propio servidor local y genera capturas en `artifacts/`. Verifica respuestas, marcas, recarga de sesión, omisiones, notas, ambos planes, lecturas, expiración del reloj, los cinco retos, las tarjetas, exportación/importación de copias actuales y antiguas, teclado y desbordamiento horizontal en siete pantallas con anchos de 320 a 1440 píxeles.
