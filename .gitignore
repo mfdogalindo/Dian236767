@@ -1,0 +1,9 @@
+dist/
+node_modules/
+.wrangler/
+.netlify/
+.cache/
+test-results/
+playwright-report/
+artifacts/
+rumbo-netlify.zip
