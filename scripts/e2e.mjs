@@ -1,3 +1,4 @@
+import {authenticateStudyPage} from '../tests/helpers/authenticated-page.mjs';
 import assert from 'node:assert/strict';
 import { mkdir, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
@@ -11,6 +12,7 @@ let browser;
 try{
   browser=await chromium.launch({headless:true,channel:'chromium'});
   const page=await browser.newPage({viewport:{width:1440,height:1100}});
+  await authenticateStudyPage(page);
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   const open=async(hash='')=>{await page.goto(`http://127.0.0.1:4173/${hash}`);await page.waitForSelector(`main[data-page="${hash.slice(1)||'dashboard'}"] .page-heading`);};
   await open();
@@ -35,7 +37,7 @@ try{
   await page.click('[data-action="confirm-finish"]');
   await page.waitForSelector('.result-summary');
   assert.equal(await page.locator('.review-card').count(),10);
-  const stored=await page.evaluate(()=>JSON.parse(localStorage.getItem('rumbo-236767-v1')));
+  const stored=await page.evaluate(()=>JSON.parse(localStorage.getItem('rumbo-236767-v1:user:study-test')).state);
   assert.equal(stored.history[0].score.omitted,9);
   assert.equal(stored.active,null);
   console.log('✓ Respuestas, marcas, recarga, omisiones y cierre');
@@ -76,9 +78,9 @@ try{
   await page.keyboard.press('ArrowRight');
   assert.equal(await page.locator('.option[aria-checked="true"] .option-letter').innerText(),'2');
   await page.reload();await page.waitForSelector('.resume-banner');
-  await page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('rumbo-236767-v1'));s.active.deadline=Date.now()-1000;localStorage.setItem('rumbo-236767-v1',JSON.stringify(s));});
+  await page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('rumbo-236767-v1:user:study-test')).state;s.active.deadline=Date.now()-1000;localStorage.setItem('rumbo-236767-v1:user:study-test',JSON.stringify({state:s,base:null,dirty:true}));});
   await page.reload();await page.waitForSelector('.result-summary');
-  const expired=await page.evaluate(()=>JSON.parse(localStorage.getItem('rumbo-236767-v1')).history.at(-1));
+  const expired=await page.evaluate(()=>JSON.parse(localStorage.getItem('rumbo-236767-v1:user:study-test')).state.history.at(-1));
   assert.equal(expired.score.total,40);assert.equal(expired.score.correct,0);assert.equal(expired.score.percentage,0);
   console.log('✓ 60 ítems, autoinforme sin nota, teclado y vencimiento del reloj');
 
@@ -122,6 +124,7 @@ try{
   await page.setViewportSize({width:320,height:900});
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Desbordamiento en resultados a 320px');
   const mobile=await browser.newPage({viewport:{width:390,height:844}});
+  await authenticateStudyPage(mobile);
   await mobile.goto('http://127.0.0.1:4173/');await mobile.waitForSelector('.start-practice');
   assert.equal(await mobile.locator('.mobile-nav a').count(),4);
   assert.equal(await mobile.locator('.hero-art').count(),0);
@@ -165,7 +168,7 @@ try{
   assert.equal(await page.locator('.recall-summary strong').first().innerText(),'15');
   await page.reload();await page.waitForSelector('.recall-card');
   assert.equal(await page.locator('.recall-summary strong').first().innerText(),'15');
-  const reviewed=await page.evaluate(()=>JSON.parse(localStorage.getItem('rumbo-236767-v1')).reviews);
+  const reviewed=await page.evaluate(()=>JSON.parse(localStorage.getItem('rumbo-236767-v1:user:study-test')).state.reviews);
   assert.equal(reviewed.f01.step,0);assert.equal(reviewed.f01.due-reviewed.f01.last,1);
   for(const width of [320,390,768,1024,1440]){
     await page.setViewportSize({width,height:900});
@@ -206,7 +209,7 @@ try{
   await page.locator('#import-file').setInputFiles({name:'legacy.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(legacy))});
   await page.waitForSelector('dialog[open]');await page.click('[data-action="confirm-import"]');
   await page.waitForSelector('.start-practice');
-  const restored=await page.evaluate(()=>JSON.parse(localStorage.getItem('rumbo-236767-v1')));
+  const restored=await page.evaluate(()=>JSON.parse(localStorage.getItem('rumbo-236767-v1:user:study-test')).state);
   assert.equal(restored.history.length,2);assert.equal(restored.completed[0],0);
   assert.equal(restored.read[0],'tributario-0');
   assert.deepEqual(restored.reviews,{});assert.deepEqual(restored.longCompleted,[]);
@@ -248,7 +251,7 @@ try{
   const oldCorrect=originalQuestions[1].correct;
   await page.locator(`[data-option="${oldCorrect}"]`).click();
   await page.click('[data-action="finish"]');await page.click('[data-action="confirm-finish"]');
-  const legacyResult=await page.evaluate(()=>JSON.parse(localStorage.getItem('rumbo-236767-v1')).history.at(-1));
+  const legacyResult=await page.evaluate(()=>JSON.parse(localStorage.getItem('rumbo-236767-v1:user:study-test')).state.history.at(-1));
   assert.equal(legacyResult.score.percentage,100);
   assert.equal(legacyResult.questions[1].options.length,2);
   await open('#simulators');await page.click('[data-mode="topic"]');
@@ -266,7 +269,7 @@ try{
     await page.click('[data-action="confirm-start"]');
     await page.waitForSelector('.case-context');
     assert.match(await page.locator('#timer').innerText(),/0[45]:/);
-    const active=await page.evaluate(()=>JSON.parse(localStorage.getItem('rumbo-236767-v1')).active);
+    const active=await page.evaluate(()=>JSON.parse(localStorage.getItem('rumbo-236767-v1:user:study-test')).state.active);
     assert.equal(active.questions.filter(q=>q.scenario&&q.rationales?.length===3).length,40);
     assert.equal(active.questions.filter(q=>q.type!=='functional').length,20);
     await page.setViewportSize({width:320,height:900});

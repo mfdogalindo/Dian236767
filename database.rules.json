@@ -1,0 +1,19 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "users": {
+      "$uid": {
+        "progress": {
+          ".read": "auth != null && auth.uid === $uid && auth.token.firebase.sign_in_provider === 'google.com'",
+          ".write": "auth != null && auth.uid === $uid && auth.token.firebase.sign_in_provider === 'google.com' && newData.exists()",
+          ".validate": "newData.hasChildren(['version', 'payload', 'updatedAt'])",
+          "version": { ".validate": "newData.isNumber() && newData.val() === 1" },
+          "payload": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 4000000" },
+          "updatedAt": { ".validate": "newData.isNumber() && newData.val() === now" },
+          "$other": { ".validate": false }
+        }
+      }
+    }
+  }
+}

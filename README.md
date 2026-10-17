@@ -1,6 +1,8 @@
 # Rumbo · OPEC 236767
 
-Web de preparación para Gestor I, ficha AT-FL-3008, Fiscalización y Liquidación. HTML, CSS y JavaScript nativos, sin servidor de aplicación, cuentas, claves API ni base de datos. El sitio funciona con archivos estáticos en Netlify y Cloudflare Workers Static Assets.
+Web de preparación para Gestor I, ficha AT-FL-3008, Fiscalización y Liquidación. HTML, CSS y JavaScript nativos con inicio de sesión obligatorio mediante Google y Firebase Realtime Database. El sitio funciona con archivos estáticos en Netlify y Cloudflare Workers Static Assets.
+
+Para activar el guardado por cuenta, sigue [FIREBASE_SETUP.md](FIREBASE_SETUP.md). La configuración web está en `firebase-cfg.js` y las reglas privadas por usuario en `database.rules.json`. La publicación del sitio no publica automáticamente las reglas.
 
 ## Ejecutar en local
 
@@ -85,7 +87,7 @@ La guía aportada resuelve la duración oficial: cinco horas (§5), con fecha pr
 
 Las copias JSON v1 previas siguen siendo compatibles: el historial y los índices de lecturas anteriores se conservan. Los nuevos campos de tarjetas, ruta larga y verificaciones se añaden con valores vacíos si faltan.
 
-El progreso se guarda en `localStorage`, en el navegador y origen donde se usa. No se sincroniza automáticamente entre dominios o dispositivos; usa exportar/importar. Cambiar de dominio o borrar datos del navegador no traslada el progreso. Si el almacenamiento está bloqueado o lleno, se informa y se permite exportar.
+El progreso se guarda en una copia local por UID y se sincroniza con RTDB después de entrar con Google. En otro navegador o dominio autorizado, la misma cuenta recupera su avance de la nube. Los cambios aún sin sincronizar permanecen solo en la copia local; exportar/importar sigue disponible como respaldo. El avance del antiguo modo invitado puede recuperarse desde una cuenta autenticada; ya no permite utilizar la aplicación sin entrar.
 
 ## Estructura
 
@@ -101,7 +103,7 @@ netlify.toml         Configuración Netlify
 wrangler.jsonc       Configuración Cloudflare Workers Static Assets
 ```
 
-Los archivos fuentes y el sitio generado no incluyen servicios de analítica ni recursos de terceros para funcionar.
+Al abrir la aplicación se descarga el SDK del CDN oficial y se comprueba la sesión de Google. Antes de autenticar no se muestran las pantallas de estudio ni se descarga el banco. Las rutas y acciones de avance se bloquean mientras no haya una cuenta de Google verificada. No se carga Analytics. Los archivos estáticos publicados no tienen control de acceso del servidor; la privacidad del avance la aplican las reglas de RTDB.
 
 ## Verificación en navegador
 
