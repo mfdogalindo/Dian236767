@@ -1,6 +1,8 @@
 # Rumbo · OPEC 236767
 
-Web de preparación para Gestor I, ficha AT-FL-3008, Fiscalización y Liquidación. HTML, CSS y JavaScript nativos, sin servidor de aplicación, cuentas, claves API ni base de datos. El sitio funciona con archivos estáticos en Netlify y Cloudflare Workers Static Assets.
+Web de preparación para Gestor I, ficha AT-FL-3008, Fiscalización y Liquidación. HTML, CSS y JavaScript nativos con modo invitado local e inicio de sesión opcional mediante Google y Firebase Realtime Database. El sitio funciona con archivos estáticos en Netlify y Cloudflare Workers Static Assets.
+
+Para activar el guardado por cuenta, sigue [FIREBASE_SETUP.md](FIREBASE_SETUP.md). La configuración web está en `firebase-cfg.js` y las reglas privadas por usuario en `database.rules.json`. La publicación del sitio no publica automáticamente las reglas.
 
 ## Ejecutar en local
 
@@ -101,7 +103,7 @@ netlify.toml         Configuración Netlify
 wrangler.jsonc       Configuración Cloudflare Workers Static Assets
 ```
 
-Los archivos fuentes y el sitio generado no incluyen servicios de analítica ni recursos de terceros para funcionar.
+El modo invitado funciona sin cargar Firebase. Al conectar Google, se descarga el SDK del CDN oficial y se usa Authentication/Realtime Database. No se carga Analytics.
 
 ## Verificación en navegador
 
