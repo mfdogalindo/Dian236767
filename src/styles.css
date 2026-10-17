@@ -8,3 +8,20 @@
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;scroll-behavior:auto!important}}
 @media(max-width:700px){.lesson>p{font-size:15px;line-height:1.9}.example p{font-size:14px}.option{font-size:15px;padding:15px 12px;line-height:1.7}.question-hint,.likert-notice{font-size:13px}.question-nav .btn{min-height:44px;font-size:12px}.review-options>div{font-size:14px}.error-card>p,.explanation p{font-size:13px}.question-card h2{font-size:23px}.question-tools .btn{font-size:11px}.question-card .question-meta .pill{font-size:8px}.check-label{font-size:12px}select,input[type=date],textarea{font-size:16px}.btn.primary,.btn.outline{min-height:42px}}
 @media print{.sidebar,.topbar,.mobile-nav,.footer,.btn,.hero-art,#toast{display:none!important}.main-wrap{margin:0}main{padding:10px}.hero{background:#fff;color:#222}.hero-copy{width:100%}.hero h2 em,.hero-copy>p,.hero-foot{color:#444}.card-icon,.stat-icon{background:none}.page-heading{margin:15px 0}.dashboard-columns{grid-template-columns:1fr}.right-column{display:none}.stats-grid{grid-template-columns:repeat(4,1fr)}article,section{break-inside:avoid}.question-card{box-shadow:none}}
+/* Casos y orientación de la guía: lectura cómoda también en móviles. */
+.case-context { padding: 1.25rem; margin: 1rem 0; border-left: 4px solid #28765a; background: #f1f6f3; border-radius: 8px; }
+.case-context p { line-height: 1.8; white-space: pre-line; }
+.case-context .eyebrow, .case-context + .eyebrow { display: block; }
+.rationale-detail { border-top: 1px solid #dce5df; margin-top: 1rem; padding-top: 1rem; }
+.rationale-detail p { line-height: 1.7; }
+.guide-section details { padding: 1rem 0; border-top: 1px solid #dce5df; }
+.guide-section summary { cursor: pointer; font-weight: 650; }
+.guide-section li { margin: .75rem 0; line-height: 1.7; }
+.guide-facts { display: flex; flex-wrap: wrap; gap: 1.5rem; }
+.guide-table { overflow-x: auto; margin-top: 1rem; }
+.guide-table table { width: 100%; border-collapse: collapse; }
+.guide-table th, .guide-table td { padding: .75rem; text-align: left; border-bottom: 1px solid #dce5df; }
+.pjs-intro .btn { margin-top: .5rem; }
+.pjs-intro .form-card-body { display: flex; flex-direction: column; align-items: stretch; gap: .75rem; }
+.pjs-intro .form-card-body > .btn { position: static; grid-area: auto; }
+.practice-tabs { flex-wrap: wrap; }

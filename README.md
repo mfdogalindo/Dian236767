@@ -43,11 +43,24 @@ En un flujo de Cloudflare Workers conectado a Git, usa `npm run build` como buil
 
 Referencia: [Workers con archivos estáticos](https://developers.cloudflare.com/workers/static-assets/get-started/).
 
+## Actualización basada en la guía DIAN 2676
+
+- Revisadas editorialmente 20 preguntas existentes: A3, A14, A38, B27, B31, B39, B40, C4, C13, C37, P1-8, P2-6, P3-3, P3-6, P4-3, P4-4, P4-5, P4-9, P5-3 y P5-4. Ahora incluyen caso, tarea, distractores plausibles, justificaciones individuales y referencia. Las demás preguntas anteriores aún conservan su contenido original.
+- Los tres ítems de verdadero/falso se sustituyeron por casos de tres alternativas. Se precisaron modalidad, diferencia entre mínimo y ponderación, corte normativo y valoración de documentos con discrepancias. Los autoinformes siguen sin clave ni puntuación.
+- Las revisiones tienen versión propia. `previous-questions.json` conserva las 20 versiones reemplazadas exclusivamente para validar progreso antiguo; no se usa como banco de nuevas prácticas. Una sesión antigua conserva su pregunta y clave, mientras un reintento nuevo utiliza la versión revisada. Los informes fuente permanecen intactos.
+- 24 casos situacionales originales con caso, enunciado, tres alternativas, explicación de cada distractor, habilidad y referencia. Dos bloques de 12, con 30 minutos o sin reloj.
+- La práctica inicial utiliza el nuevo banco. Las 230 preguntas anteriores se conservan como material complementario; banco total: 254 ítems.
+- Biblioteca con orientación, método de resolución, ponderaciones por modalidad, logística y descarga de la guía aportada. La guía confirma cinco horas; los tiempos de los ejercicios son parámetros de entrenamiento.
+- Contexto completo y explicaciones disponibles en resultados y bitácora. Claves y explicaciones mantienen su correspondencia al mezclar opciones y exportar/importar.
+- El formato sigue el §4.4; los casos no son oficiales ni acreditan cobertura de los ejes individuales. Los ejemplos de gestión ilustran habilidades y deben contrastarse con los indicadores del empleo.
+
 ## Funciones
+
+La interfaz móvil concentra la navegación en Inicio, Practicar, Estudiar y Más. El inicio muestra una acción principal y dos métricas; las prácticas se eligen en Completos, Por tema y A medida. El índice de preguntas, las explicaciones, las notas, las pautas de estudio y las verificaciones se despliegan a petición. Durante una práctica se oculta la navegación general para concentrarse en la pregunta. El contenido y el progreso existente se conservan.
 
 - Panel con métricas reales; el estado inicial no inventa resultados.
 - Tres simulacros de 60 ítems, con 40 funcionales, 12 comportamentales y 8 de integridad por forma.
-- Cinco retos temáticos de proceso.md: 50 preguntas adicionales, de dos o tres alternativas, con explicaciones individuales y reloj de 20 minutos. Banco total: 230 ítems, 170 funcionales y 60 autoinformes.
+- Cinco retos temáticos basados en proceso.md: 50 preguntas con tres alternativas en las nuevas sesiones, explicaciones y reloj de 20 minutos. Con los 24 casos nuevos, el banco total tiene 254 ítems: 194 funcionales y 60 autoinformes.
 - Repaso activo con 16 tarjetas, explicación oculta hasta solicitarla y programación progresiva de repasos a 1, 3, 7 y 14 días de Colombia. La autoevaluación organiza el repaso; no genera una nota.
 - Ruta adicional de 12 semanas con productos y metas de práctica; progreso independiente del intensivo y lista de 15 verificaciones.
 - Práctica aleatoria de 10, 20 o todas las preguntas disponibles por tema; sin reloj.
@@ -68,7 +81,7 @@ El segundo informe enlaza a formas de 100 preguntas y a otros PDF mediante URLs 
 
 El porcentaje funcional se calcula como aciertos/preguntas funcionales × 100, truncado a dos decimales. Las omisiones funcionales cuentan como no acertadas. No reproduce la transformación psicométrica oficial. Los autoinformes únicamente registran respuestas y finalización; no son instrumentos psicométricos validados.
 
-Las fuentes discrepan sobre duración y cantidad oficial: `proceso.md` cita secundariamente 156 ítems y cinco horas, mientras los primeros informes usan cuatro horas y no confirman un número. La biblioteca explica esta discrepancia. Los 240 minutos de las formas A/B/C y los 20 minutos de los retos son parámetros de práctica. La fecha de examen y el corte normativo mencionados se atribuyen a las investigaciones. El usuario debe confirmarlos en GOA/SIMO. No se fija automáticamente una cuenta regresiva con una fecha no confirmada. Las ponderaciones se presentan para la categoría de ingreso sin experiencia descrita en los informes.
+La guía aportada resuelve la duración oficial: cinco horas (§5), con fecha programada del 8 de noviembre de 2026 y normas vigentes expedidas antes del 19 de junio de 2026 (§4.3). No establece un total universal de ítems. La biblioteca explica las ponderaciones de todas las modalidades y la diferencia entre porcentaje de práctica y puntaje psicométrico. SIMO y CNSC prevalecen ante actualizaciones. Los originales de investigación se conservan como antecedentes y pueden contener datos superados por la guía.
 
 Las copias JSON v1 previas siguen siendo compatibles: el historial y los índices de lecturas anteriores se conservan. Los nuevos campos de tarjetas, ruta larga y verificaciones se añaden con valores vacíos si faltan.
 
@@ -102,4 +115,4 @@ npm.cmd run test:e2e
 
 En Linux/macOS usa `PLAYWRIGHT_BROWSERS_PATH=.cache/browsers npx playwright install chromium --no-shell` y luego `npm run test:e2e`.
 
-La prueba inicia y cierra su propio servidor local y genera capturas en `artifacts/`. Verifica respuestas, marcas, recarga de sesión, omisiones, notas, ambos planes, lecturas, expiración del reloj, los cinco retos, las tarjetas, exportación/importación de copias actuales y antiguas, teclado y desbordamiento horizontal en siete pantallas con anchos de 320 a 1440 píxeles.
+La prueba inicia y cierra su propio servidor local y genera capturas en `artifacts/`. Verifica respuestas, marcas, recarga de sesión, omisiones, notas, ambos planes, lecturas, expiración del reloj, los cinco retos, las tarjetas, exportación/importación de copias actuales y antiguas, teclado, controles desplegables, cuatro accesos de navegación móvil y desbordamiento horizontal en ocho pantallas con anchos de 320 a 1440 píxeles.

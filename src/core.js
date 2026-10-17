@@ -7,8 +7,11 @@ export function prepareQuestions(questions, random=Math.random){
   return questions.map(q=>{
     if(q.type!=='functional')return {...q};
     const order=shuffle(q.options.map((_,i)=>i),random);
-    return {...q,options:order.map(i=>q.options[i]),correct:order.indexOf(q.correct)};
+    return {...q,options:order.map(i=>q.options[i]),correct:order.indexOf(q.correct),...(q.rationales?{rationales:order.map(i=>q.rationales[i])}:{})};
   });
+}
+export function findQuestionVersion(question, current, previous=[]){
+  return [...current,...previous].find(q=>q.id===question.id&&(q.revision??1)===(question.revision??1)&&q.prompt===question.prompt);
 }
 export function grade(session){
   const functional=session.questions.filter(q=>q.type==='functional');
