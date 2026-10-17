@@ -67,7 +67,7 @@ try{
   await page.locator('[data-action="start-form"]').first().click();
   await page.click('[data-action="confirm-start"]');
   await page.waitForSelector('#timer');
-  assert.match(await page.locator('#timer').innerText(),/0[34]:/);
+  assert.match(await page.locator('#timer').innerText(),/0[45]:/);
   assert.equal(await page.locator('.map-button').count(),60);
   await page.locator('.question-index summary').click();
   await page.locator('[data-action="jump"][data-index="40"]').click();
@@ -237,9 +237,9 @@ try{
   assert.match(await page.locator('.guide-section').innerText(),/5 horas/);
   console.log('✓ Bloques situacionales, reloj, recarga, distractores, modo sin reloj y guía descargable');
   const previous=await (await page.request.get('http://127.0.0.1:4173/assets/previous-questions.json')).json();
-  const originalQuestions=['A38','P3-6'].map(id=>previous.find(q=>q.id===id));
+  const originalQuestions=['A1','P3-6'].map(id=>previous.find(q=>q.id===id));
   const legacyRevision=structuredClone(payload);
-  legacyRevision.state.active={...legacyRevision.state.history[0],id:'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',name:'Intento anterior a la revisión',questions:originalQuestions,answers:{A38:originalQuestions[0].correct},flags:[],index:1,deadline:null};
+  legacyRevision.state.active={...legacyRevision.state.history[0],id:'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',name:'Intento anterior a la revisión',questions:originalQuestions,answers:{A1:originalQuestions[0].correct},flags:[],index:1,deadline:null};
   await page.locator('#import-file').setInputFiles({name:'previous-bank.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(legacyRevision))});
   await page.waitForSelector('dialog[open]');await page.click('[data-action="confirm-import"]');
   await page.reload();await page.click('[data-action="resume"]');
@@ -258,6 +258,34 @@ try{
   assert.match(await page.locator('.case-context').innerText(),/REVISADO/);
   await page.click('[data-action="finish"]');await page.click('[data-action="confirm-finish"]');
   console.log('✓ Intento anterior importado y recargado con su clave; nuevo intento usa la revisión');
+  for(const form of ['A','B','C']){
+    await open('#simulators');await page.click('[data-mode="full"]');
+    assert.match(await page.locator('.abc-overview').innerText(),/120 funcionales revisadas/);
+    await page.click(`[data-action="start-form"][data-id="${form}"]`);
+    assert.match(await page.locator('dialog').innerText(),/300 minutos/);
+    await page.click('[data-action="confirm-start"]');
+    await page.waitForSelector('.case-context');
+    assert.match(await page.locator('#timer').innerText(),/0[45]:/);
+    const active=await page.evaluate(()=>JSON.parse(localStorage.getItem('rumbo-236767-v1')).active);
+    assert.equal(active.questions.filter(q=>q.scenario&&q.rationales?.length===3).length,40);
+    assert.equal(active.questions.filter(q=>q.type!=='functional').length,20);
+    await page.setViewportSize({width:320,height:900});
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+    if(form==='A')await page.screenshot({path:'artifacts/abc-caso-movil.png',fullPage:true});
+    await page.locator('.option').first().click();
+    await page.click('[data-action="finish"]');await page.click('[data-action="confirm-finish"]');
+    await page.locator('.answer-detail summary').first().click();
+    assert.match(await page.locator('.rationale-detail').first().innerText(),/Referencia:/);
+    assert.equal(await page.locator('.case-context').count(),40);
+    assert.equal(await page.locator('.rationale-detail').count(),40);
+    await page.setViewportSize({width:1440,height:1000});
+  }
+  await open('#library');
+  const csvResponse=await page.request.get('http://127.0.0.1:4173/assets/cobertura-abc.csv');
+  assert.equal(csvResponse.status(),200);
+  const csv=await csvResponse.text();assert.equal(csv.trim().split('\n').length,121);
+  assert.match(csv,/Pendiente de contrastar con indicadores individuales/);
+  console.log('✓ A/B/C: 120 casos, 300 minutos, revisiones móviles y matriz de cobertura');
   assert.deepEqual(errors,[]);
   console.log('✓ Ocho pantallas en 6 tamaños, navegación móvil de 4 accesos y detalles desplegables');
 }finally{await browser?.close();server.kill();}

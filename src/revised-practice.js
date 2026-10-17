@@ -1,3 +1,4 @@
+import {completeFormRevisions} from './forms-revisions.js';
 // Revisiones editoriales de preguntas existentes. Los documentos fuente no se modifican.
 // Cada alternativa viaja con su justificación; la interfaz mezcla ambas conjuntamente.
 const revisions = [
@@ -89,5 +90,8 @@ export const revisedPractice = Object.fromEntries(revisions.map(([id,title,scena
 
 export function revisePractice(bank){
   for(const id of Object.keys(revisedPractice))if(!bank.some(q=>q.id===id))throw Error(`Revisión sin pregunta original: ${id}`);
-  return bank.map(q=>revisedPractice[q.id]?{...q,...revisedPractice[q.id]}:q);
+  const completed=completeFormRevisions(bank);
+  for(const id of Object.keys(completed))if(revisedPractice[id])throw Error(`Revisión duplicada: ${id}`);
+  const all={...revisedPractice,...completed};
+  return bank.map(q=>all[q.id]?{...q,...all[q.id]}:q);
 }

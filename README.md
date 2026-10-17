@@ -45,18 +45,18 @@ Referencia: [Workers con archivos estáticos](https://developers.cloudflare.com/
 
 ## Actualización basada en la guía DIAN 2676
 
-- Revisadas editorialmente 20 preguntas existentes: A3, A14, A38, B27, B31, B39, B40, C4, C13, C37, P1-8, P2-6, P3-3, P3-6, P4-3, P4-4, P4-5, P4-9, P5-3 y P5-4. Ahora incluyen caso, tarea, distractores plausibles, justificaciones individuales y referencia. Las demás preguntas anteriores aún conservan su contenido original.
+- Reconstruidas las 120 funcionales de A/B/C: las diez revisadas antes y las 110 pendientes. Todas presentan caso, tarea, tres acciones, explicación por alternativa y referencia. También se mantienen diez revisiones de los retos temáticos. Los otros 40 ítems de los retos y los 60 autoinformes conservan su contenido.
 - Los tres ítems de verdadero/falso se sustituyeron por casos de tres alternativas. Se precisaron modalidad, diferencia entre mínimo y ponderación, corte normativo y valoración de documentos con discrepancias. Los autoinformes siguen sin clave ni puntuación.
-- Las revisiones tienen versión propia. `previous-questions.json` conserva las 20 versiones reemplazadas exclusivamente para validar progreso antiguo; no se usa como banco de nuevas prácticas. Una sesión antigua conserva su pregunta y clave, mientras un reintento nuevo utiliza la versión revisada. Los informes fuente permanecen intactos.
+- Las revisiones tienen versión propia. `previous-questions.json` conserva las 130 versiones reemplazadas exclusivamente para validar progreso antiguo; no se usa como banco de nuevas prácticas. Una sesión antigua conserva su pregunta y clave, mientras un reintento nuevo utiliza la versión revisada. Los informes fuente permanecen intactos.
 - 24 casos situacionales originales con caso, enunciado, tres alternativas, explicación de cada distractor, habilidad y referencia. Dos bloques de 12, con 30 minutos o sin reloj.
-- La práctica inicial utiliza el nuevo banco. Las 230 preguntas anteriores se conservan como material complementario; banco total: 254 ítems.
+- La práctica inicial utiliza el nuevo banco. Los identificadores y cantidades se conservan; banco total: 254 ítems. La matriz `dist/assets/cobertura-abc.csv` permite revisar los 120 casos por tema y referencia, con cobertura OPEC pendiente de contraste.
 - Biblioteca con orientación, método de resolución, ponderaciones por modalidad, logística y descarga de la guía aportada. La guía confirma cinco horas; los tiempos de los ejercicios son parámetros de entrenamiento.
 - Contexto completo y explicaciones disponibles en resultados y bitácora. Claves y explicaciones mantienen su correspondencia al mezclar opciones y exportar/importar.
 - El formato sigue el §4.4; los casos no son oficiales ni acreditan cobertura de los ejes individuales. Los ejemplos de gestión ilustran habilidades y deben contrastarse con los indicadores del empleo.
 
 ## Funciones
 
-La interfaz móvil concentra la navegación en Inicio, Practicar, Estudiar y Más. El inicio muestra una acción principal y dos métricas; las prácticas se eligen en Completos, Por tema y A medida. El índice de preguntas, las explicaciones, las notas, las pautas de estudio y las verificaciones se despliegan a petición. Durante una práctica se oculta la navegación general para concentrarse en la pregunta. El contenido y el progreso existente se conservan.
+La interfaz móvil concentra la navegación en Inicio, Practicar, Estudiar y Más. El inicio muestra una acción principal y dos métricas; las prácticas se eligen en Situacionales, Simulacros A/B/C, Por tema y A medida. El índice de preguntas, las explicaciones, las notas, las pautas de estudio y las verificaciones se despliegan a petición. Durante una práctica se oculta la navegación general para concentrarse en la pregunta. El contenido y el progreso existente se conservan.
 
 - Panel con métricas reales; el estado inicial no inventa resultados.
 - Tres simulacros de 60 ítems, con 40 funcionales, 12 comportamentales y 8 de integridad por forma.
@@ -65,7 +65,7 @@ La interfaz móvil concentra la navegación en Inicio, Practicar, Estudiar y Má
 - Ruta adicional de 12 semanas con productos y metas de práctica; progreso independiente del intensivo y lista de 15 verificaciones.
 - Práctica aleatoria de 10, 20 o todas las preguntas disponibles por tema; sin reloj.
 - Opciones funcionales mezcladas conservando su clave. Las opciones Likert mantienen su orden.
-- Simulacro cronometrado de 240 minutos. Respuestas, marcas y fecha límite sobreviven a recargas; salir no pausa el reloj.
+- Nuevas formas A/B/C cronometradas a 300 minutos, como referencia de la jornada de cinco horas. Las sesiones antiguas conservan su fecha límite de 240 minutos. La cantidad de 60 ítems es de entrenamiento y no reproduce el ritmo oficial. Respuestas, marcas y fecha límite sobreviven a recargas; salir no pausa el reloj.
 - Resultado funcional con omisiones, desglose por tema y revisión con explicaciones. Los autoinformes no reciben una nota.
 - Bitácora de errores y omisiones, clasificación de causas, notas y reintento de errores pendientes.
 - Diez áreas de lectura, progreso por lección y enlaces primarios.
@@ -75,7 +75,7 @@ La interfaz móvil concentra la navegación en Inicio, Practicar, Estudiar y Má
 
 ## Contenido y límites
 
-Se utilizan `deep-research-report.md`, `deep-research-report(1).md` y `proceso.md`. Los originales se conservan intactos. `scripts/extract.mjs` convierte los 180 ítems en texto del primer informe y sus claves en un banco JSON; el build falla si faltan preguntas. Las explicaciones agrupadas de las formas B y C se adaptan por bloque. `scripts/extract-process.mjs` añade las 50 preguntas y claves de `proceso.md`; las explicaciones individuales se adaptaron para la web. Las lecturas sintetizan los tres documentos y añaden cuentas de compensación, logística, niveles comportamentales y el método C–H–N–A–C–E; no sustituyen los textos normativos. Los archivos originales se conservan sin editar.
+Se utilizan `deep-research-report.md`, `deep-research-report(1).md` y `proceso.md`. Los originales se conservan intactos. `scripts/extract.mjs` convierte los 180 ítems en texto del primer informe y sus claves en un banco JSON; el build falla si faltan preguntas. Los extractores preservan el material original para la compatibilidad del historial. `src/forms-a.js`, `forms-b.js` y `forms-c.js` aportan los 110 casos nuevos; `forms-revisions.js` y `revised-practice.js` aplican todas las revisiones al banco de nuevas sesiones. Las 120 funcionales A/B/C usan explicaciones individuales, no los comentarios agrupados originales. `scripts/extract-process.mjs` añade las 50 preguntas y claves de `proceso.md`; las explicaciones individuales se adaptaron para la web. Las lecturas sintetizan los tres documentos y añaden cuentas de compensación, logística, niveles comportamentales y el método C–H–N–A–C–E; no sustituyen los textos normativos. Los archivos originales se conservan sin editar.
 
 El segundo informe enlaza a formas de 100 preguntas y a otros PDF mediante URLs `sandbox:`. Esos archivos no estaban adjuntos: no se ofrecen descargas inexistentes ni se afirma haber importado sus 200 preguntas.
 

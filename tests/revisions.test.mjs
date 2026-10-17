@@ -6,10 +6,13 @@ import {extractProcessBank} from '../scripts/extract-process.mjs';
 import {revisePractice,revisedPractice} from '../src/revised-practice.js';
 import {findQuestionVersion,prepareQuestions,grade} from '../src/core.js';
 import {sources} from '../src/content.js';
+import {completeFormRows} from '../src/forms-revisions.js';
 const old=[...extractBank(await readFile('deep-research-report.md','utf8')),...extractProcessBank(await readFile('proceso.md','utf8'))];
 const updated=revisePractice(old);
-test('revisa 20 preguntas en su lugar, sin duplicar ni alterar los originales',()=>{
+test('revisa 130 preguntas en su lugar, sin duplicar ni alterar los originales',()=>{
   assert.equal(Object.keys(revisedPractice).length,20);
+  assert.equal(completeFormRows.length,110);
+  assert.equal(updated.filter(q=>q.revision===2).length,130);
   assert.equal(updated.length,old.length);
   assert.deepEqual(updated.map(q=>q.id),old.map(q=>q.id));
   assert.ok(old.every(q=>q.revision===undefined));
@@ -26,7 +29,7 @@ test('revisa 20 preguntas en su lugar, sin duplicar ni alterar los originales',(
   assert.ok(updated.filter(q=>q.type==='functional').every(q=>q.options.length===3));
 });
 test('versiones anteriores y nuevas se resuelven sin recalificar con otra clave',()=>{
-  for(const id of Object.keys(revisedPractice)){
+  for(const id of updated.filter(q=>q.revision===2).map(q=>q.id)){
     const original=old.find(q=>q.id===id),revised=updated.find(q=>q.id===id);
     assert.equal(findQuestionVersion(original,updated,old),original);
     assert.equal(findQuestionVersion(revised,updated,old),revised);
@@ -41,4 +44,30 @@ test('versiones anteriores y nuevas se resuelven sin recalificar con otra clave'
 });
 test('la revisión falla si una pregunta de origen desaparece',()=>{
   assert.throws(()=>revisePractice(old.filter(q=>q.id!=='P3-6')),/P3-6/);
+  assert.throws(()=>revisePractice(old.filter(q=>q.id!=='C40')),/C40/);
+});
+
+test('A/B/C contienen 120 casos completos y autoinformes intactos',()=>{
+  const functional=updated.filter(q=>['A','B','C'].includes(q.form)&&q.type==='functional');
+  assert.equal(functional.length,120);
+  assert.equal(new Set(functional.map(q=>q.scenario)).size,120);
+  for(const form of ['A','B','C']){
+    const block=functional.filter(q=>q.form===form);
+    assert.equal(block.length,40);
+    assert.ok(block.every(q=>q.scenario.length>=300&&q.rationales.length===3&&q.reference&&q.skill));
+    const personal=updated.filter(q=>q.form===form&&q.type!=='functional');
+    assert.equal(personal.length,20);
+    personal.forEach(q=>assert.deepEqual(q,old.find(o=>o.id===q.id)));
+  }
+  // Detecta pistas sistemáticas de longitud; no certifica dificultad psicométrica.
+  for(const extreme of [Math.max,Math.min]){
+    const count=functional.filter(q=>q.options[q.correct].length===extreme(...q.options.map(o=>o.length))).length;
+    assert.ok(count<functional.length*.6,`Pista de longitud en ${count} preguntas`);
+  }
+});
+
+test('las veinte revisiones previas conservan exactamente su contenido',()=>{
+  for(const [id,revision] of Object.entries(revisedPractice)){
+    assert.deepEqual(updated.find(q=>q.id===id),{...old.find(q=>q.id===id),...revision});
+  }
 });
