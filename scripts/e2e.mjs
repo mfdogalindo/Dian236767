@@ -10,7 +10,7 @@ await new Promise((done,fail)=>{server.stdout.on('data',chunk=>{if(chunk.toStrin
 await mkdir('artifacts',{recursive:true});
 let browser;
 try{
-  browser=await chromium.launch({headless:true,channel:'chromium'});
+  browser=await chromium.launch({headless:true,channel:process.env.PLAYWRIGHT_CHANNEL||'chromium'});
   const page=await browser.newPage({viewport:{width:1440,height:1100}});
   await authenticateStudyPage(page);
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
@@ -159,15 +159,15 @@ try{
 
   await page.setViewportSize({width:1440,height:1100});
   await open('#review');
-  assert.equal(await page.locator('.recall-summary strong').first().innerText(),'16');
+  assert.equal(await page.locator('.recall-summary strong').first().innerText(),'28');
   assert.equal(await page.locator('.recall-answer').count(),0);
   await page.click('[data-action="reveal-card"]');
   await page.waitForSelector('.recall-answer');
   await page.screenshot({path:'artifacts/repaso-escritorio.png',fullPage:true});
   await page.click('[data-action="rate-card"][data-recalled="true"]');
-  assert.equal(await page.locator('.recall-summary strong').first().innerText(),'15');
+  assert.equal(await page.locator('.recall-summary strong').first().innerText(),'27');
   await page.reload();await page.waitForSelector('.recall-card');
-  assert.equal(await page.locator('.recall-summary strong').first().innerText(),'15');
+  assert.equal(await page.locator('.recall-summary strong').first().innerText(),'27');
   const reviewed=await page.evaluate(()=>JSON.parse(localStorage.getItem('rumbo-236767-v1:user:study-test')).state.reviews);
   assert.equal(reviewed.f01.step,0);assert.equal(reviewed.f01.due-reviewed.f01.last,1);
   for(const width of [320,390,768,1024,1440]){
@@ -289,6 +289,68 @@ try{
   const csv=await csvResponse.text();assert.equal(csv.trim().split('\n').length,121);
   assert.match(csv,/Pendiente de contrastar con indicadores individuales/);
   console.log('✓ A/B/C: 120 casos, 300 minutos, revisiones móviles y matriz de cobertura');
+  await open('#topics');
+  await page.click('.service-entry');await page.waitForSelector('.service-overview');
+  assert.match(await page.locator('h1').innerText(),/Protocolo de atención/);
+  assert.equal(await page.locator('.lesson').count(),12);
+  assert.equal(await page.locator('.lesson a[href*="CT-CAC-0054.pdf#page="]').count(),12);
+  await page.locator('[data-read="atencion-0"]').check();
+  await page.reload();await page.waitForSelector('.service-overview');
+  assert.equal(await page.locator('[data-read="atencion-0"]').isChecked(),true);
+  const manual=await page.request.get('http://127.0.0.1:4173/assets/CT-CAC-0054.pdf');
+  assert.equal(manual.status(),200);assert.match(manual.headers()['content-type'],/application\/pdf/);
+  for(const width of [320,390,768,1440]){
+    await page.setViewportSize({width,height:900});
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,`Atención a ${width}px`);
+  }
+  await page.setViewportSize({width:390,height:844});
+  await page.screenshot({path:'artifacts/atencion-movil.png'});
+  await page.locator('.lesson').last().scrollIntoViewIfNeeded();
+  assert.equal(await page.locator('.lesson').last().isVisible(),true);
+  await page.screenshot({path:'artifacts/atencion-lectura-movil.png'});
+  await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));
+  await page.setViewportSize({width:1440,height:1000});
+  await page.screenshot({path:'artifacts/atencion-escritorio.png'});
+  await page.click('[data-action="service-review"]');await page.waitForSelector('#review-topic');
+  assert.equal(await page.locator('#review-topic').inputValue(),'atencion');
+  assert.equal(await page.locator('.recall-summary strong').first().innerText(),'12');
+  await page.click('[data-action="reveal-card"]');assert.match(await page.locator('.recall-answer').innerText(),/CT-CAC-0054/);
+  await page.click('[data-action="rate-card"][data-recalled="true"]');
+  assert.equal(await page.locator('#review-topic').inputValue(),'atencion');
+  assert.equal(await page.locator('.recall-summary strong').first().innerText(),'11');
+  assert.match(await page.locator('.recall-card .pill').innerText(),/Atención al usuario/);
+  await page.reload();await page.waitForSelector('#review-topic');
+  await page.selectOption('#review-topic','atencion');
+  assert.equal(await page.locator('.recall-summary strong').first().innerText(),'11');
+  await open('#atencion');await page.click('[data-action="start-service"][data-id="AT1"]');
+  await page.waitForSelector('.question-card');assert.equal(await page.locator('.map-button').count(),10);
+  assert.match(await page.locator('#timer').innerText(),/00:(19|20):/);
+  await page.locator('.option').first().click();await page.reload();await page.waitForSelector('.start-practice');
+  await open('#simulators');await page.click('[data-action="resume"]');await page.waitForSelector('.option.selected');
+  await page.click('[data-action="finish"]');await page.click('[data-action="confirm-finish"]');
+  await page.waitForSelector('.result-summary');assert.equal(await page.locator('.review-card').count(),10);
+  await page.locator('.answer-detail summary').first().click();
+  assert.match(await page.locator('.explanation').first().innerText(),/entrenamiento CT-CAC-0054/);
+  await open('#notebook');await page.selectOption('#error-filter','atencion');
+  assert.ok(await page.locator('.error-card').count()>=9);
+  await open('#atencion');await page.click('[data-action="start-service"][data-id="AT2"]');
+  await page.waitForSelector('.question-card');assert.equal(await page.locator('.map-button').count(),10);
+  await page.click('[data-action="finish"]');await page.click('[data-action="confirm-finish"]');
+  await page.waitForSelector('.result-summary');
+  await open('#simulators');await page.click('[data-action="practice-mode"][data-mode="custom"]');
+  await page.selectOption('[name="topic"]','atencion');await page.selectOption('[name="count"]','all');
+  await page.click('#practice-form button');await page.waitForSelector('.question-card');
+  assert.equal(await page.locator('.map-button').count(),20);assert.equal(await page.locator('#timer').innerText(),'A tu ritmo');
+  await page.click('[data-action="finish"]');await page.click('[data-action="confirm-finish"]');await page.waitForSelector('.result-summary');
+  await open('#library');
+  const serviceDownload=page.waitForEvent('download');await page.click('[data-action="export"]');
+  const serviceExport=await serviceDownload;await serviceExport.saveAs('artifacts/atencion-progreso.json');
+  await page.locator('#import-file').setInputFiles('artifacts/atencion-progreso.json');
+  await page.waitForSelector('[data-action="confirm-import"]');await page.click('[data-action="confirm-import"]');
+  await page.waitForSelector('.start-practice');
+  await open('#atencion');assert.equal(await page.locator('[data-read="atencion-0"]').isChecked(),true);
+  await page.click('[data-action="service-review"]');assert.equal(await page.locator('.recall-summary strong').first().innerText(),'11');
+  console.log('✓ Atención: 12 lecturas, PDF, 12 tarjetas filtradas, dos simulacros, 20 casos, errores y exportación/importación');
   assert.deepEqual(errors,[]);
   console.log('✓ Ocho pantallas en 6 tamaños, navegación móvil de 4 accesos y detalles desplegables');
 }finally{await browser?.close();server.kill();}

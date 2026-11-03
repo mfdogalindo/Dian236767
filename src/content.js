@@ -1,4 +1,6 @@
+import {serviceTopic, serviceManual} from './service-content.js';
 export const sources = {
+  protocolo:serviceManual,
   banrep:{label:'Régimen cambiario · Banco de la República',url:'https://www.banrep.gov.co/es/resolucion-externa-1-2018-cual-se-compendia-y-modifica-el-regimen-cambios-internacionales'},
   compensacion:{label:'Cuentas de compensación · Banrep',url:'https://www.banrep.gov.co/es/politica-monetaria-cambiaria/regulacion-operaciones-cambiarias/generalidades-cuentas-compensacion'},
   integridad:{label:'Código de Integridad · Función Pública',url:'https://www.funcionpublica.gov.co/web/eva/codigo-integridad'},
@@ -55,6 +57,7 @@ export const topics = [
   {id:'comportamental',name:'Competencias comportamentales',short:'Comportamental',icon:'users',color:'blue',description:'Adaptabilidad, comunicación y trabajo en equipo.',sources:['merf','concurso'],lessons:[['Leer y responder con autenticidad','Practica la lectura de afirmaciones directas e inversas. Reflexiona sobre comunicación efectiva, adaptabilidad y trabajo en equipo a partir de experiencias propias. No se calcula una nota ni un perfil ideal.','Reconocer cuándo necesitas retroalimentación es parte del aprendizaje. Contesta según tu comportamiento habitual.']]},
   {id:'integridad',name:'Autoinforme de integridad',short:'Integridad',icon:'shield',color:'purple',description:'Reflexión sobre valores, imparcialidad y reserva.',sources:['merf','concurso'],lessons:[['Consistencia y reflexión','Reflexiona sobre conflictos de interés, manejo de recursos e información reservada. Estas afirmaciones son ejercicios del informe, no instrumentos psicométricos validados. No se asignan respuestas correctas.','Lee con atención palabras como «siempre», «únicamente» y «aunque». No respondas siguiendo un patrón de letras.']]}
 ];
+topics.push(serviceTopic);
 export const forms=[
   {id:'A',name:'Fundamentos y procedimiento',tag:'CONSTRUYE TU BASE',description:'Competencia, evidencia y garantías de la actuación administrativa.',icon:'book',color:'green'},
   {id:'B',name:'Fiscalización en acción',tag:'APLICA LO APRENDIDO',description:'Control tributario, aduanero, cambiario e internacional.',icon:'scale',color:'orange'},

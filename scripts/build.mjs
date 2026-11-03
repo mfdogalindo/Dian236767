@@ -1,14 +1,16 @@
+import { serviceBank } from '../src/service-content.js';
 import { mkdir, copyFile, writeFile, readFile } from 'node:fs/promises';
 import { situationalBank } from '../src/situational.js';
 import { revisePractice } from '../src/revised-practice.js';
 import { extractBank } from './extract.mjs';
 import { extractProcessBank } from './extract-process.mjs';
 await mkdir('dist/assets', { recursive: true });
-for (const file of ['index.html', 'styles.css', 'study.css', 'simple.css', 'app.js', 'core.js', 'content.js', 'process-content.js', 'review.js', 'study.js', 'guide.js', 'sync.js', 'firebase.js', 'account.js']) await copyFile(`src/${file}`, `dist/${file}`);
+for (const file of ['index.html', 'styles.css', 'study.css', 'simple.css', 'app.js', 'core.js', 'content.js', 'process-content.js', 'review.js', 'study.js', 'guide.js', 'sync.js', 'firebase.js', 'account.js', 'service-content.js']) await copyFile(`src/${file}`, `dist/${file}`);
+await copyFile('CT-CAC-0054.pdf','dist/assets/CT-CAC-0054.pdf');
 await copyFile('firebase-cfg.js','dist/firebase-cfg.js');
 const report = await readFile('deep-research-report.md', 'utf8');
 const original = [...extractBank(report), ...extractProcessBank(await readFile('proceso.md','utf8'))];
-const questions = [...revisePractice(original), ...situationalBank];
+const questions = [...revisePractice(original), ...situationalBank, ...serviceBank];
 await writeFile('dist/assets/questions.json', JSON.stringify(questions));
 // Solo para validar intentos guardados: estas versiones no entran en nuevas prácticas.
 await writeFile('dist/assets/previous-questions.json', JSON.stringify(original.filter(q=>questions.find(n=>n.id===q.id)?.revision===2)));

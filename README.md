@@ -118,3 +118,11 @@ npm.cmd run test:e2e
 En Linux/macOS usa `PLAYWRIGHT_BROWSERS_PATH=.cache/browsers npx playwright install chromium --no-shell` y luego `npm run test:e2e`.
 
 La prueba inicia y cierra su propio servidor local y genera capturas en `artifacts/`. Verifica respuestas, marcas, recarga de sesión, omisiones, notas, ambos planes, lecturas, expiración del reloj, los cinco retos, las tarjetas, exportación/importación de copias actuales y antiguas, teclado, controles desplegables, cuatro accesos de navegación móvil y desbordamiento horizontal en ocho pantallas con anchos de 320 a 1440 píxeles.
+
+## Protocolo de atención al usuario
+
+En **Estudiar → Protocolo de atención al usuario** (`#atencion`) se incluyen 12 lecturas, 12 tarjetas con repaso espaciado y dos bloques de 10 casos (20 minutos cada uno). Los 20 casos también están disponibles en práctica mixta, a medida y por tema; sus resultados se incorporan a la bitácora y al avance por cuenta. El filtro de Repaso permite estudiar exclusivamente estas tarjetas.
+
+Fuente: cartilla DIAN **CT-CAC-0054, versión 04, 2025**, incluida en `CT-CAC-0054.pdf`. Cada lectura, tarjeta y caso indica páginas de consulta; el build copia el PDF a `dist/assets/`. Las preguntas son material original de entrenamiento, no ítems oficiales. Los simulacros A/B/C conservan sus 60 ítems; el tema tiene sus propios bloques AT1/AT2. Contrastar versión y corte con el listado maestro de la DIAN y la guía del examen.
+
+Validación: `npm test`, `npm run build` y `npm run test:e2e`. Si se usa Chrome instalado en vez del Chromium de Playwright: `PLAYWRIGHT_CHANNEL=chrome npm run test:e2e`.

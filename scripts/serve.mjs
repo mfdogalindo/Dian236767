@@ -3,7 +3,7 @@ import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { resolve, sep, extname } from 'node:path';
 const root = resolve('dist');
-const types={'.html':'text/html; charset=utf-8','.css':'text/css','.js':'text/javascript','.json':'application/json','.md':'text/plain; charset=utf-8'};
+const types={'.pdf':'application/pdf','.html':'text/html; charset=utf-8','.css':'text/css','.js':'text/javascript','.json':'application/json','.md':'text/plain; charset=utf-8'};
 const server=createServer(async(req,res)=>{
   try {
     const path=resolve(root, '.'+decodeURIComponent(new URL(req.url,'http://localhost').pathname));

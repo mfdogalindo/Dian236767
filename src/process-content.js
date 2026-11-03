@@ -1,3 +1,4 @@
+import {serviceCards} from './service-content.js';
 export const drills = [
   {id:'P1',name:'Función pública y marco institucional',heading:'Simulacro de función pública y marco institucional',topic:'gestion',icon:'building',color:'green',keys:'BACBB BACBB'.replaceAll(' ',''),sources:['merf','mipg','acuerdo'],description:'Perfil, integridad, MIPG y reglas del proceso.'},
   {id:'P2',name:'Determinación y fiscalización tributaria',heading:'Simulacro de determinación y fiscalización tributaria',topic:'tributario',icon:'scale',color:'orange',keys:'AAABABABBB',sources:['et','merf'],description:'Facultades, actos, logística y valoración de evidencia.'},
@@ -57,7 +58,7 @@ export const flashcards = [
   ['f14','datos','¿Cómo corriges un error en un informe o expediente?','Reconocerlo y aplicar el mecanismo institucional de corrección, dejando trazabilidad. No ocultarlo ni editarlo sin rastro.','merf'],
   ['f15','metodo','Recuerda la secuencia C–H–N–A–C–E.','Competencia → Hechos → Norma → Actuación → Control de debido proceso e integridad → Efecto que resuelve el caso.','merf'],
   ['f16','metodo','Si una modificación normativa es posterior al corte, ¿debes usarla automáticamente en el examen?','No. Consulta la fuente oficial y sus notas de vigencia; reconstruye el texto examinable según la GOA. La versión actual y la del examen pueden diferir.','concurso']
-].map(([id,topic,prompt,answer,source])=>({id,topic,prompt,answer,source}));
+].map(([id,topic,prompt,answer,source])=>({id,topic,prompt,answer,source})).concat(serviceCards);
 
 export function enrichTopics(topics) {
   const additions = {

@@ -27,7 +27,7 @@ export function onValue(ref,callback){const listener=()=>callback({});window.add
 const remote=new Map();let revision=0,denied=false,sdkRequests=0,bankRequests=0;
 let browser;
 try{
-  browser=await chromium.launch({headless:true,channel:'chromium'});
+  browser=await chromium.launch({headless:true,channel:process.env.PLAYWRIGHT_CHANNEL||'chromium'});
   const page=await browser.newPage({viewport:{width:1280,height:1000}});
   page.setDefaultTimeout(15000);
   page.on('request',request=>{if(request.url().endsWith('/assets/questions.json'))bankRequests++;});

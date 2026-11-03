@@ -43,7 +43,7 @@ test('las lecturas previas conservan sus índices y las nuevas fuentes existen',
   for(const t of before)assert.deepEqual(copy.find(x=>x.id===t.id).lessons.slice(0,t.lessons.length),t.lessons);
   assert.ok(copy.reduce((n,t)=>n+t.lessons.length,0)>before.reduce((n,t)=>n+t.lessons.length,0));
   assert.equal(longPlan.length,12);
-  assert.equal(flashcards.length,16);assert.equal(new Set(flashcards.map(c=>c.id)).size,16);
+  assert.equal(flashcards.length,28);assert.equal(new Set(flashcards.map(c=>c.id)).size,28);
   assert.ok(flashcards.every(c=>sources[c.source]&&topics.some(t=>t.id===c.topic)));
 });
 test('el calendario usa el cambio de día en Colombia',()=>{
